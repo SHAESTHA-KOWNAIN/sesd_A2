@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Food Ordering System Diagrams — PlantUML (single file)</title>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 24px; color:#111 }
+    header { margin-bottom: 20px; }
+    h1 { margin: 0 0 6px; font-size: 22px; }
+    p.lead { margin:0; color:#555 }
+    section.diagram { border: 1px solid #e6e6e6; border-radius:8px; padding:16px; margin:18px 0; background: #fafafa }
+    section.diagram h2 { margin-top:0; }
+    .diagram-container { text-align:center; }
+    .diagram-svg { max-width:100%; height:auto; border:1px dashed #ddd; background:white }
+    .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace; font-size:12px; white-space:pre-wrap; background:#0f172a; color:#d1fae5; padding:12px; border-radius:6px; overflow:auto; max-height:320px }
+    footer { margin-top:24px; color:#666; font-size:13px }
+    .controls { margin-bottom: 12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap }
+    button { padding:8px 12px; border-radius:6px; border:1px solid #d1d5db; background:#fff; cursor:pointer }
+    button.primary { background:#0ea5a4; color:#fff; border-color:transparent }
+    small.note { color:#666 }
+  </style>
+  <!-- pako for DEFLATE compression (used to encode PlantUML) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js" integrity="sha512-+nM1e1y9r3nq3F6e5o3eYqk3m6I5B0h7rXk5bQm/VvJ6k+zVxJk8i9hYg6v8Q7Q4S+6w5Jb1e2k9d3l4s5t6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+  <header>
+    <h1>Food Ordering System Diagrams</h1>
+    <p class="lead">One-file HTML that renders the PlantUML diagrams (Use Case, Class, Sequence, Activity, State Machine).</p>
+  </header>
+
+  <section class="diagram" id="usecase">
+    <h2>1) Use Case Diagram</h2>
+    <div class="controls">
+      <button onclick="renderDiagram('usecase')">Render / Refresh</button>
+      <button onclick="copyPlantuml('usecase')">Copy PlantUML</button>
+      <small class="note">Rendered via the public PlantUML server.</small>
+    </div>
+    <div class="diagram-container" id="usecase-wrap">
+      <img class="diagram-svg" id="usecase-img" alt="Use Case diagram will appear here">
+    </div>
+    <details>
+      <summary>PlantUML source</summary>
+      <pre class="code" id="usecase-src"></pre>
+    </details>
+  </section>
+
+  <section class="diagram" id="class">
+    <h2>2) Class Diagram</h2>
+    <div class="controls">
+      <button onclick="renderDiagram('class')">Render / Refresh</button>
+      <button onclick="copyPlantuml('class')">Copy PlantUML</button>
+    </div>
+    <div class="diagram-container" id="class-wrap">
+      <img class="diagram-svg" id="class-img" alt="Class diagram will appear here">
+    </div>
+    <details>
+      <summary>PlantUML source</summary>
+      <pre class="code" id="class-src"></pre>
+    </details>
+  </section>
+
+  <section class="diagram" id="sequence">
+    <h2>3) Sequence Diagram — Place & Track Order</h2>
+    <div class="controls">
+      <button onclick="renderDiagram('sequence')">Render / Refresh</button>
+      <button onclick="copyPlantuml('sequence')">Copy PlantUML</button>
+    </div>
+    <div class="diagram-container" id="sequence-wrap">
+      <img class="diagram-svg" id="sequence-img" alt="Sequence diagram will appear here">
+    </div>
+    <details>
+      <summary>PlantUML source</summary>
+      <pre class="code" id="sequence-src"></pre>
+    </details>
+  </section>
+
+  <section class="diagram" id="activity">
+    <h2>4) Activity Diagram — Ordering & Delivery Flow</h2>
+    <div class="controls">
+      <button onclick="renderDiagram('activity')">Render / Refresh</button>
+      <button onclick="copyPlantuml('activity')">Copy PlantUML</button>
+    </div>
+    <div class="diagram-container" id="activity-wrap">
+      <img class="diagram-svg" id="activity-img" alt="Activity diagram will appear here">
+    </div>
+    <details>
+      <summary>PlantUML source</summary>
+      <pre class="code" id="activity-src"></pre>
+    </details>
+  </section>
+
+  <section class="diagram" id="state">
+    <h2>5) State Machine Diagram — Order Status Lifecycle</h2>
+    <div class="controls">
+      <button onclick="renderDiagram('state')">Render / Refresh</button>
+      <button onclick="copyPlantuml('state')">Copy PlantUML</button>
+    </div>
+    <div class="diagram-container" id="state-wrap">
+      <img class="diagram-svg" id="state-img" alt="State diagram will appear here">
+    </div>
+    <details>
+      <summary>PlantUML source</summary>
+      <pre class="code" id="state-src"></pre>
+    </details>
+  </section>
+
+  <footer>
+    <p>If you want these diagrams exported as PNG/SVG files or converted to Mermaid/interactive HTML, say so and I'll provide it.</p>
+  </footer>
+
+<script>
+/*
+ PlantUML encoding steps (in JS):
+ 1. UTF-8 encode the PlantUML text
+ 2. Deflate (raw) compress bytes (use pako)
+ 3. Encode result in PlantUML's 6-bit alphabet.
+ The encode function below follows the official PlantUML client-side examples.
+*/
+
+(function(){
+  // PlantUML 6-bit encoding alphabet
+  const encode6bit = function(b) {
+    if (b < 10) return String.fromCharCode(48 + b);              // 0-9 => '0'..'9'
+    b -= 10;
+    if (b < 26) return String.fromCharCode(65 + b);             // 10-35 => 'A'..'Z'
+    b -= 26;
+    if (b < 26) return String.fromCharCode(97 + b);             // 36-61 => 'a'..'z'
+    b -= 26;
+    if (b === 0) return '-';
+    if (b === 1) return '_';
+    return '?';
+  };
+
+  const append3bytes = function(b1, b2, b3) {
+    const c1 = b1 >> 2;
+    const c2 = ((b1 & 0x3) << 4) | (b2 >> 4);
+    const c3 = ((b2 & 0xF) << 2) | (b3 >> 6);
+    const c4 = b3 & 0x3F;
+    return encode6bit(c1 & 0x3F) + encode6bit(c2 & 0x3F) + encode6bit(c3 & 0x3F) + encode6bit(c4 & 0x3F);
+  };
+
+  window.plantumlEncode = function(s) {
+    // UTF-8 encode
+    const utf8encoder = new TextEncoder();
+    const inputBytes = utf8encoder.encode(s);
+
+    // deflate raw (no zlib header) using pako
+    const deflated = pako.deflate(inputBytes, { level: 9 });
+
+    // convert to custom base64 6-bit alphabet
+    let res = '';
+    for (let i = 0; i < deflated.length; i += 3) {
+      const b1 = deflated[i];
+      const b2 = (i+1 < deflated.length) ? deflated[i+1] : 0;
+      const b3 = (i+2 < deflated.length) ? deflated[i+2] : 0;
+      res += append3bytes(b1, b2, b3);
+    }
+    return res;
+  };
+})();
+
+// PlantUML sources (the same content from earlier PlantUML file, split per diagram)
+const PLANTUML = {
+  usecase: `@startuml
+left to right direction
+actor User
+actor "Delivery Partner" as DeliveryPartner
+actor "Restaurant Admin" as RestaurantAdmin
+actor "Platform Admin" as PlatformAdmin
+
+rectangle "Food Ordering Platform" {
+  User -- (Browse Restaurants)
+  User -- (Place Order)
+  User -- (Pay Online)
+  User -- (Track Order)
+
+  (Place Order) .> (Pay Online) : <<includes>>
+  (Place Order) .> (Browse Restaurants) : <<includes>>
+
+  DeliveryPartner -- (Accept Delivery)
+  DeliveryPartner -- (Update Delivery Status)
+
+  RestaurantAdmin -- (Manage Menu)
+  RestaurantAdmin -- (Accept/Reject Order)
+  RestaurantAdmin -- (Update Order Status)
+
+  PlatformAdmin -- (Manage Restaurants)
+  PlatformAdmin -- (Manage Delivery Partners)
+  PlatformAdmin -- (View Reports)
+}
+note right of (Track Order)
+  Tracks: accepted -> prepared -> dispatched -> delivered
+end note
+@enduml`,
+
+  class: `@startuml
+package "Domain Model" {
+  class User {
+    +userId: UUID
+    +name: String
+    +email: String
+    +phone: String
+    +address: Address
+    +browseRestaurants(): List<Restaurant>
+    +placeOrder(o: Order): Order
+    +trackOrder(orderId: UUID): OrderStatus
+  }
+
+  class Restaurant {
+    +restaurantId: UUID
+    +name: String
+    +location: Address
+    +menu: List<MenuItem>
+    +acceptOrder(order: Order): boolean
+    +updateOrderStatus(orderId: UUID, status: OrderStatus)
+  }
+
+  class MenuItem {
+    +itemId: UUID
+    +name: String
+    +description: String
+    +price: Decimal
+    +available: boolean
+  }
+
+  class Payment {
+    +paymentId: UUID
+    +orderId: UUID
+    +amount: Decimal
+    +method: String
+    +status: PaymentStatus
+    +processPayment(): PaymentStatus
+  }
+
+  class Order {
+    +orderId: UUID
+    +userId: UUID
+    +restaurantId: UUID
+    +items: List<OrderItem>
+    +totalAmount: Decimal
+    +status: OrderStatus
+    +placedAt: DateTime
+    +updateStatus(s: OrderStatus)
+  }
+
+  class OrderItem {
+    +itemId: UUID
+    +quantity: int
+    +price: Decimal
+  }
+
+  class Delivery {
+    +deliveryId: UUID
+    +orderId: UUID
+    +partnerId: UUID
+    +pickupETA: DateTime
+    +dropETA: DateTime
+    +status: DeliveryStatus
+    +assignPartner(partnerId: UUID)
+    +updateLocation(lat: Decimal, lng: Decimal)
+  }
+
+  class DeliveryPartner {
+    +partnerId: UUID
+    +name: String
+    +phone: String
+    +vehicleInfo: String
+    +location: GeoLocation
+    +acceptDelivery(del: Delivery)
+    +updateDeliveryStatus(deliveryId: UUID, status: DeliveryStatus)
+  }
+
+  enum OrderStatus {
+    INITIATED
+    ACCEPTED
+    PREPARING
+    PREPARED
+    DISPATCHED
+    OUT_FOR_DELIVERY
+    DELIVERED
+    CANCELLED
+  }
+
+  enum PaymentStatus {
+    PENDING
+    SUCCESS
+    FAILED
+    REFUNDED
+  }
+
+  enum DeliveryStatus {
+    NOT_ASSIGNED
+    ASSIGNED
+    PICKED_UP
+    IN_TRANSIT
+    DELIVERED
+    FAILED
+  }
+
+  User "1" -- "0..*" Order
+  Restaurant "1" -- "0..*" Order
+  Restaurant "1" -- "0..*" MenuItem
+  Order "1" -- "0..*" OrderItem
+  Order "1" -- "1" Payment
+  Order "1" -- "0..1" Delivery
+  DeliveryPartner "1" -- "0..*" Delivery
+}
+@enduml`,
+
+  sequence: `@startuml
+participant "User (App)" as U
+participant "Platform Backend" as PB
+participant "Restaurant System" as RS
+participant "Payment Gateway" as PG
+participant "Delivery Service" as DS
+participant "Delivery Partner App" as DPA
+
+U -> PB : Browse Restaurants()
+PB -> PB : Query Restaurants & Menus
+PB --> U : Return list of restaurants & menus
+
+U -> PB : Select items & PlaceOrder(orderDetails)
+PB -> PG : CreatePaymentIntent(amount, userPaymentInfo)
+PG --> PB : PaymentConfirmed(paymentId)
+PB -> RS : SendNewOrder(orderDetails, paymentId)
+RS --> PB : OrderAccepted(orderId)
+
+PB -> PB : Create Order record (status=ACCEPTED)
+PB --> U : OrderConfirmed(orderId, status=ACCEPTED)
+
+RS -> RS : PrepareOrder(orderId)
+RS --> PB : UpdateOrderStatus(orderId, PREPARED)
+
+PB -> DS : RequestDeliveryAssignment(orderId, pickupLocation)
+DS --> PB : DeliveryAssigned(deliveryId, partnerId)
+PB -> DPA : Notify(assignment, delivery details)
+DPA --> PB : PartnerAccepted(deliveryId)
+
+DPA -> DS : PickupComplete(deliveryId)
+DS --> PB : DeliveryStatusUpdate(orderId, DISPATCHED)
+
+DPA -> PB : UpdateLocation(lat,lng)
+PB -> U : PushTrackingUpdate(status=OUT_FOR_DELIVERY, location)
+DPA -> PB : Delivered(orderId)
+PB -> RS : NotifyDeliveryComplete(orderId)
+PB --> U : PushNotification(status=DELIVERED)
+
+U -> PB : TrackOrder(orderId)
+PB --> U : Return latest OrderStatus + DeliveryLocation
+@enduml`,
+
+  activity: `@startuml
+|Activity|
+start
+:User opens app;
+:Browse restaurants & menu;
+if (Select items?) then (no)
+  stop
+else (yes)
+  :Place order;
+  :Provide delivery address & payment;
+  fork
+    :Process payment;
+  fork again
+    :Send order to restaurant;
+  end fork
+  if (Payment successful?) then (no)
+    :Show payment failed;
+    stop
+  else (yes)
+    :Restaurant accepts order?;
+    if (Rejected) then (yes)
+      :Notify user & refund if paid;
+      stop
+    else (no)
+      :Restaurant prepares food;
+      :Mark as prepared;
+      :Request delivery assignment;
+      :Delivery partner assigned;
+      :Delivery partner picks up order;
+      :Delivery in transit (real-time tracking);
+      :Delivery partner delivers order;
+      :Confirm delivery to platform and restaurant;
+      :Update order status to DELIVERED;
+      :Prompt for rating & feedback;
+      stop
+    endif
+  endif
+endif
+@enduml`,
+
+  state: `@startuml
+[*] --> INITIATED
+
+INITIATED --> PAYMENT_PENDING : placeOrder()
+PAYMENT_PENDING --> PAYMENT_FAILED : paymentFailed()
+PAYMENT_PENDING --> ACCEPTED : paymentSuccess()
+
+ACCEPTED --> PREPARING : restaurantAccepts()
+PREPARING --> PREPARED : preparationComplete()
+PREPARED --> DISPATCHED : deliveryAssigned() / pickup()
+DISPATCHED --> OUT_FOR_DELIVERY : partnerPickedUp()
+OUT_FOR_DELIVERY --> DELIVERED : deliveryCompleted()
+OUT_FOR_DELIVERY --> DELIVERY_FAILED : deliveryFailed()
+
+ACCEPTED --> CANCELLED : cancelByUserOrRestaurant()
+PAYMENT_PENDING --> CANCELLED : cancelBeforePayment()
+PREPARED --> CANCELLED : cancelBeforePickup()
+DELIVERED --> [*]
+
+state PAYMENT_PENDING {
+  note right
+    Waiting for online payment gateway
+  end note
+}
+
+state DELIVERY_FAILED {
+  note right
+    Could retry assignment or return to restaurant
+  end note
+}
+@enduml`
+};
+
+// Put sources into the UI
+document.getElementById('usecase-src').textContent = PLANTUML.usecase;
+document.getElementById('class-src').textContent = PLANTUML.class;
+document.getElementById('sequence-src').textContent = PLANTUML.sequence;
+document.getElementById('activity-src').textContent = PLANTUML.activity;
+document.getElementById('state-src').textContent = PLANTUML.state;
+
+// Helper: build PlantUML server URL
+function plantumlURLFromText(text) {
+  try {
+    const encoded = plantumlEncode(text);
+    return 'https://www.plantuml.com/plantuml/svg/' + encoded;
+  } catch (err) {
+    console.error('Encoding error', err);
+    return null;
+  }
+}
+
+// Render a diagram into its img element
+function renderDiagram(name) {
+  const src = PLANTUML[name];
+  const url = plantumlURLFromText(src);
+  if (!url) {
+    alert('Failed to build PlantUML URL. See console for errors.');
+    return;
+  }
+  const imgId = name + '-img';
+  const img = document.getElementById(imgId);
+  img.src = url;
+  img.alt = name + ' diagram';
+}
+
+// Copy source PlantUML to clipboard
+function copyPlantuml(name) {
+  const src = PLANTUML[name];
+  navigator.clipboard.writeText(src).then(() => {
+    alert('PlantUML source copied to clipboard for: ' + name);
+  }).catch((err) => {
+    console.error(err);
+    alert('Copy failed — you can select and copy the code block manually.');
+  });
+}
+
+// initial render for all diagrams
+window.addEventListener('load', function() {
+  ['usecase','class','sequence','activity','state'].forEach(renderDiagram);
+});
+</script>
+</body>
+</html>
